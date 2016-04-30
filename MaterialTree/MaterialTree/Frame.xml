@@ -1,49 +1,36 @@
 <Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Frame.lua" />
-	<Frame name="Frame1" parent="UIParent" toplevel="true" movable="true" enableMouse="true">
-		<Size x="200" y="200" />
+	<Frame name="MaterialFrame" hidden="true" movable="true">
+		<Size x="274" y="360" />
 		<Anchors>
-			<Anchor point="CENTER" />
+			<Anchor point="TOPLEFT" x="265" y="-102" />
 		</Anchors>
 		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
 			<BackgroundInsets>
 				<AbsInset left="11" right="12" top="12" bottom="11" />
 			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
+			<TileSize val="32" />
+			<EdgeSize val="32" />
 		</Backdrop>
 		<Layers>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" text="Hello, world!">
-					<Size x="80" y="20" />
+				<FontString name="MaterialText" inherits="GameFontNormal" text="">
+					<Size x="201" y="281" />
 					<Anchors>
-						<Anchor point="TOPLEFT" x="57" y="-35" />
+						<Anchor point="TOPLEFT" x="36" y="-20" />
 					</Anchors>
 				</FontString>
 			</Layer>
 		</Layers>
 		<Frames>
-			<Button inherits="UIPanelButtonTemplate" movable="true" text="Button1">
+			<Button name="UpdateButton" inherits="UIPanelButtonTemplate" text="Update">
 				<Size x="75" y="23" />
 				<Anchors>
-					<Anchor point="TOPLEFT" x="57" y="-97" />
+					<Anchor point="TOPLEFT" x="96" y="-318" />
 				</Anchors>
 				<Scripts>
-					<OnLoad>
-						self:RegisterForDrag("LeftButton");
-					</OnLoad>
-					<OnDragStart>
-						self:StartMoving();
-					</OnDragStart>
-					<OnDragStop>
-						self:StopMovingOrSizing();
-					</OnDragStop>
 					<OnClick>
-						Button1_OnClick()
+						UpdateButton_OnClick()
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -51,7 +38,7 @@
 		<Scripts>
 			<OnLoad>
 				self:RegisterForDrag("LeftButton");
-				Frame1_OnLoad()
+				MaterialFrame_OnLoad()
 			</OnLoad>
 			<OnDragStart>
 				self:StartMoving();
@@ -60,7 +47,7 @@
 				self:StopMovingOrSizing();
 			</OnDragStop>
 			<OnEvent>
-				Frame1_OnEvent()
+				MaterialFrame_OnEvent(self, event, ...)
 			</OnEvent>
 		</Scripts>
 	</Frame>

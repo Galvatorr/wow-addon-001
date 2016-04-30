@@ -2,11 +2,11 @@
 <Project ToolsVersion="4.0" DefaultTargets="Deploy" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
-    <Name>MatList</Name>
+    <Name>MaterialTree</Name>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{a46ce88a-e90e-4a2d-90a0-7b257eeb74a1}</ProjectGuid>
-    <AssemblyName>MatList</AssemblyName>
-    <RootNamespace>MatList</RootNamespace>
+    <ProjectGuid>{8631531c-dfb4-4849-9c5c-fa588807696a}</ProjectGuid>
+    <AssemblyName>MaterialTree</AssemblyName>
+    <RootNamespace>MaterialTree</RootNamespace>
     <DeployBasePath>C:\Program Files (x86)\World of Warcraft</DeployBasePath>
     <RuntimePath>C:\Program Files (x86)\World of Warcraft</RuntimePath>
     <WowPath>C:\Program Files (x86)\World of Warcraft</WowPath>
@@ -15,7 +15,7 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="MatList.toc">
+    <Content Include="MaterialTree.toc">
       <SubType>TableOfContents</SubType>
     </Content>
     <Content Include="Frame.xml">
