@@ -1,0 +1,8 @@
+<Script file="TestAddOn001.lua"/> 
+<Frame name="TestAddOn001"> 
+    <Scripts> 
+        <OnLoad> 
+            TestAddOn001_OnLoad();
+        </OnLoad>
+    </Scripts>
+</Frame>

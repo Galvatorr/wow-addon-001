@@ -1,0 +1,5 @@
+## Interface: 60200
+## Title : TestAddOn001
+## Notes: This AddOn does nothing but display a frame with a button
+## Author: Galvatorr Sukoshika
+TestAddOn001.xml
