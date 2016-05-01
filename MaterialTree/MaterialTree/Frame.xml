@@ -1,9 +1,9 @@
 <Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Frame.lua" />
 	<Frame name="MaterialFrame" hidden="true" movable="true">
-		<Size x="274" y="360" />
+		<Size x="368" y="359" />
 		<Anchors>
-			<Anchor point="TOPLEFT" x="265" y="-102" />
+			<Anchor point="TOPLEFT" x="265" y="-103" />
 		</Anchors>
 		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
 			<BackgroundInsets>
@@ -14,10 +14,16 @@
 		</Backdrop>
 		<Layers>
 			<Layer level="OVERLAY">
-				<FontString name="MaterialText" inherits="GameFontNormal" text="">
-					<Size x="201" y="281" />
+				<FontString name="MaterialText" inherits="GameFontNormal" text="" justifyH="LEFT">
+					<Size x="328" y="285" />
 					<Anchors>
-						<Anchor point="TOPLEFT" x="36" y="-20" />
+						<Anchor point="TOPLEFT" x="20" y="-16" />
+					</Anchors>
+				</FontString>
+				<FontString name="NumberToMakeLabel" inherits="GameFontNormal" text="Make X" justifyH="RIGHT">
+					<Size x="110" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT" x="20" y="-315" />
 					</Anchors>
 				</FontString>
 			</Layer>
@@ -26,7 +32,7 @@
 			<Button name="UpdateButton" inherits="UIPanelButtonTemplate" text="Update">
 				<Size x="75" y="23" />
 				<Anchors>
-					<Anchor point="TOPLEFT" x="96" y="-318" />
+					<Anchor point="TOPLEFT" x="260" y="-315" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
@@ -34,6 +40,12 @@
 					</OnClick>
 				</Scripts>
 			</Button>
+			<EditBox name="NumberToMakeInput" inherits="InputBoxTemplate" numeric="true">
+				<Size x="100" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="136" y="-310" />
+				</Anchors>
+			</EditBox>
 		</Frames>
 		<Scripts>
 			<OnLoad>
