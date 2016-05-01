@@ -2,8 +2,9 @@
 -- Create Date : 4/30/2016 16:43:47
 -- ChatFrame1:AddMessage
 
+
 function MaterialFrame_OnLoad()
-	MaterialText:SetText("1) Select recipe\n2) Enter number for Make X\n3) Click Update button");
+	MaterialText:SetText("1) Select recipe\n2) Enter number for Make X (1 if empty)\n3) Click Update button");
 	MaterialFrame:RegisterEvent("TRADE_SKILL_SHOW");
 	MaterialFrame:RegisterEvent("TRADE_SKILL_CLOSE");
 end
@@ -45,14 +46,13 @@ function UpdateButton_OnClick()
 	local materialDiffText = "";
 	for reagentName, materialNeededAmount in pairs(materialNeeded) do
 		-- Only add it if it is lowest-level
-		if materialLowest[reagentName] then
-			local materialDiff = materialNeededAmount - materialOwned[reagentName] < 0 and 0 or materialNeededAmount - materialOwned[reagentName];
-			materialDiffText = materialDiffText .. materialDiff .. " " .. materialLink[reagentName] .. "\n";
+		if materialNeededAmount > 0 and materialLowest[reagentName] then
+			materialDiffText = materialDiffText .. materialNeededAmount .. " " .. materialLink[reagentName] .. "\n";
 		end
 	end
 
 	-- Set text
-	MaterialText:SetText(numberToMake .. " " .. GetTradeSkillItemLink(skillIndex) .. "\n\n\nList of Remaining Lowest-Level Materials" .. "\n\n" .. materialDiffText .. "\n\nTree of All Materials\n" .. materialTreeText);
+	MaterialText:SetText(numberToMake .. " " .. GetTradeSkillItemLink(skillIndex) .. "\n\n\nList of Non-Craftable Materials Needed" .. "\n\n" .. materialDiffText .. "\n\nTree of All Materials\n" .. materialTreeText);
 end
 
 function ExpandAllHeaders()
@@ -89,37 +89,41 @@ function GetMaterialTree(skillIndex, numberToMake, spaces)
 
 	for reagentIndex = 1,GetTradeSkillNumReagents(skillIndex) do
 		-- Get some properties
-		local reagentLink = GetTradeSkillReagentItemLink(skillIndex, reagentIndex);
 		local reagentName, _, reagentCount, playerReagentCount = GetTradeSkillReagentInfo(skillIndex, reagentIndex);
-
-		-- Multiply the reagentCount by how many to make
-		local reagentCount = reagentCount * numberToMake;
+		materialLink[reagentName] = GetTradeSkillReagentItemLink(skillIndex, reagentIndex);
 
 		-- Initialize this material
 		if materialNeeded[reagentName] == nil then 
 			materialNeeded[reagentName] = 0;
 		end
+		if materialOwned[reagentName] == nil then
+			materialOwned[reagentName] = playerReagentCount;
+		end
 
-		-- Update global material lists
-		materialNeeded[reagentName] = materialNeeded[reagentName] + reagentCount;
-		materialOwned[reagentName] = playerReagentCount;
-		materialLink[reagentName] = reagentLink;
+		-- Update how many we need
+		local materialNeededPrior = materialNeeded[reagentName];
+		materialNeeded[reagentName] = materialNeeded[reagentName] + (reagentCount * numberToMake);
+
+		-- Use the ones we have
+		local useThisMany = math.min(materialNeeded[reagentName], materialOwned[reagentName]);
+		materialNeeded[reagentName] = materialNeeded[reagentName] - useThisMany;
+		materialOwned[reagentName] = materialOwned[reagentName] - useThisMany;
 		
 		-- Set text
-		materialTreeText = materialTreeText .. "\n" .. spaces .. reagentCount .. " " .. reagentLink;
+		materialTreeText = materialTreeText .. "\n" .. spaces .. (materialNeeded[reagentName] - materialNeededPrior) .. " " .. materialLink[reagentName];
+		if useThisMany > 0 then
+			materialTreeText = materialTreeText .. " (Using " .. useThisMany .. ")";
+		end
 
 		-- Recurse only if we can make this item
-		local isLowestLevel = true;
+		materialLowest[reagentName] = true;
 		for curSkillIndex = 1,GetNumTradeSkills() do 
 			if GetTradeSkillInfo(curSkillIndex) == reagentName then
-				GetMaterialTree(curSkillIndex, reagentCount, spaces .. "        ");
-				isLowestLevel = false;
+				GetMaterialTree(curSkillIndex, materialNeeded[reagentName] - materialNeededPrior, spaces .. "        ");
+				materialLowest[reagentName] = false;
 				break;
 			end
 		end
-
-		-- Set whether this is a lowest-level material
-		materialLowest[reagentName] = isLowestLevel;
 	end
 
 	-- Return variables
