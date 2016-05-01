@@ -39,17 +39,20 @@ function UpdateButton_OnClick()
 	end
 
 	-- Get material tree
-	local materialTreeText, materialNeeded, materialOwned, materialLink = GetMaterialTree(skillIndex, numberToMake, "");
+	local materialTreeText, materialNeeded, materialOwned, materialLink, materialLowest = GetMaterialTree(skillIndex, numberToMake, "");
 
 	-- Create material diff text
 	local materialDiffText = "";
 	for reagentName, materialNeededAmount in pairs(materialNeeded) do
-		local materialDiff = materialNeededAmount - materialOwned[reagentName] < 0 and 0 or materialNeededAmount - materialOwned[reagentName];
-		materialDiffText = materialDiffText .. materialDiff .. " " .. materialLink[reagentName] .. "\n";
+		-- Only add it if it is lowest-level
+		if materialLowest[reagentName] then
+			local materialDiff = materialNeededAmount - materialOwned[reagentName] < 0 and 0 or materialNeededAmount - materialOwned[reagentName];
+			materialDiffText = materialDiffText .. materialDiff .. " " .. materialLink[reagentName] .. "\n";
+		end
 	end
 
 	-- Set text
-	MaterialText:SetText(numberToMake .. " " .. GetTradeSkillItemLink(skillIndex) .. "\n\n\nList of Remaining Materials" .. "\n\n" .. materialDiffText .. "\n\nTree View of Total Materials Needed\n" .. materialTreeText);
+	MaterialText:SetText(numberToMake .. " " .. GetTradeSkillItemLink(skillIndex) .. "\n\n\nList of Remaining Lowest-Level Materials" .. "\n\n" .. materialDiffText .. "\n\nTree of All Materials\n" .. materialTreeText);
 end
 
 function ExpandAllHeaders()
@@ -81,6 +84,7 @@ function GetMaterialTree(skillIndex, numberToMake, spaces)
 		materialNeeded = {};
 		materialOwned = {};
 		materialLink = {};
+		materialLowest = {};
 	end
 
 	for reagentIndex = 1,GetTradeSkillNumReagents(skillIndex) do
@@ -105,16 +109,21 @@ function GetMaterialTree(skillIndex, numberToMake, spaces)
 		materialTreeText = materialTreeText .. "\n" .. spaces .. reagentCount .. " " .. reagentLink;
 
 		-- Recurse only if we can make this item
+		local isLowestLevel = true;
 		for curSkillIndex = 1,GetNumTradeSkills() do 
 			if GetTradeSkillInfo(curSkillIndex) == reagentName then
 				GetMaterialTree(curSkillIndex, reagentCount, spaces .. "        ");
+				isLowestLevel = false;
 				break;
 			end
 		end
+
+		-- Set whether this is a lowest-level material
+		materialLowest[reagentName] = isLowestLevel;
 	end
 
 	-- Return variables
 	if spaces == "" then
-		return materialTreeText, materialNeeded, materialOwned, materialLink;
+		return materialTreeText, materialNeeded, materialOwned, materialLink, materialLowest;
 	end
 end
