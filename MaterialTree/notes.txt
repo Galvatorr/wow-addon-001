@@ -1,0 +1,5 @@
+1) checkbox to stay open even when profession window closes 
+2) change to autopopulate 1 into edit box and get rid of this instruction on curse and in the opening text of addon
+3) github notes for 2 more things
+	3a) scrolling
+	3b) bug with making more than one of something
